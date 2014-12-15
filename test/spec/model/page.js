@@ -4,7 +4,7 @@
     it("Create page object", function() {
       var page;
       page = new Page(10, "image");
-      expect(page.original_priority).toEqual(10);
+      expect(page.originalPriority).toEqual(10);
       expect(page.type).toEqual("image");
       return expect(page.name).toBe(null);
     });

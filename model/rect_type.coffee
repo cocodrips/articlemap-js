@@ -1,7 +1,7 @@
 class RectType
   constructor: (@ratio, @min_align=1) ->
 
-@rect_types =
+@rectTypes =
   'image': [
     new RectType(0.9, 1)
     new RectType(1.6, 1)

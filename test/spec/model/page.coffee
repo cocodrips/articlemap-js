@@ -1,7 +1,7 @@
 describe "model/page", ()->
   it "Create page object", () ->
     page = new Page(10, "image")
-    expect(page.original_priority).toEqual(10)
+    expect(page.originalPriority).toEqual(10)
     expect(page.type).toEqual("image")
     expect(page.name).toBe(null)
 

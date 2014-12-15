@@ -5,10 +5,10 @@
       this.priority = priority;
       this.type = type;
       this.name = name != null ? name : null;
-      this.original_property = this.property;
+      this.originalPriority = this.priority;
       this.rect = new Rect();
       this.id = Math.random();
-      this.ideal_area = 0;
+      this.idealArea = 0;
     }
 
     Page.prototype.isEqual = function(other) {
