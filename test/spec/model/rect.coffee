@@ -7,6 +7,9 @@ describe "model/rect", ()->
     rect = new Rect()
     expect(rect.x).toEqual(0)
 
+  it "area", () ->
+    expect(@rect.area).toEqual(120000)
+
   describe "isEqual function", () ->
     it "equal", () ->
       rect_1 = new Rect(100, 100)

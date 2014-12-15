@@ -126,6 +126,18 @@
       }
       return groups;
     },
+    getOptimumSet: function(pageSets, rect) {
+      var dict, i, match, optimumSet, s, _i;
+      s = rect.area;
+      match = Infinity | 1000000000000;
+      optimumSet = null;
+      for (i = _i = 1; _i <= 4; i = ++_i) {
+        dict = pageUtils.combination(pageSets, i, s, match, optimumSet);
+        match = dict.match;
+        optimumSet = dict.optimumSet;
+      }
+      return optimumSet;
+    },
     combination: function(pageSets, n, s, match, optimumSet) {
       var areaSum, pageSet, _i, _len, _ref;
       if (pageSets.length < n) {

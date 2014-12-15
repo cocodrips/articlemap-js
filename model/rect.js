@@ -6,13 +6,10 @@
       this.y = y != null ? y : 0;
       this.width = width != null ? width : 0;
       this.height = height != null ? height : 0;
+      this.ratio = this.width / this.height;
+      this.area = this.width * this.height;
+      this.vec4 = [this.x, this.y, this.width, this.height];
     }
-
-    Rect.prototype.ratio = Rect.width / Rect.height;
-
-    Rect.prototype.area = Rect.width * Rect.height;
-
-    Rect.prototype.vec4 = [Rect.x, Rect.y, Rect.width, Rect.height];
 
     Rect.prototype.isEqual = function(other) {
       return this.x === other.x && this.y === other.y && this.width === other.width && this.height === other.height;

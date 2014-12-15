@@ -10,6 +10,9 @@
       rect = new Rect();
       return expect(rect.x).toEqual(0);
     });
+    it("area", function() {
+      return expect(this.rect.area).toEqual(120000);
+    });
     return describe("isEqual function", function() {
       it("equal", function() {
         var rect_1, rect_2;

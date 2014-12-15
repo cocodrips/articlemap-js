@@ -78,6 +78,16 @@
         groups.push(group)
     return groups
 
+  getOptimumSet: (pageSets, rect) ->
+    s = rect.area
+    match = Infinity | 1000000000000
+    optimumSet = null
+    for i in [1..4] # Change value depends on pageSet length.
+      dict = pageUtils.combination(pageSets, i, s, match, optimumSet)
+      match = dict.match
+      optimumSet = dict.optimumSet
+    return optimumSet
+
   combination: (pageSets, n, s, match, optimumSet) ->
     if pageSets.length < n
       return {"match": match, "optimumSet": optimumSet}

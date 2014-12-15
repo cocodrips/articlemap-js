@@ -2,9 +2,17 @@
 (function() {
   describe("page-utils", function() {
     beforeEach(function() {
+      var page, _i, _len, _ref, _results;
       this.pageSets = [new Page(1, "text"), new Page(2, "text"), [new Page(3, "image")]];
       this.pageSets2 = [new Page(10, "text"), new Page(2, "text"), [new Page(3, "image")], [new Page(2, "text"), new Page(2, "text")]];
-      return this.flatSets = [new Page(1, "text"), new Page(2, "text"), new Page(5, "text"), new Page(10, "text"), new Page(11, "text"), new Page(20, "text"), new Page(30, "image"), new Page(32, "image"), new Page(45, "image")];
+      this.flatSets = [new Page(1, "text"), new Page(2, "text"), new Page(5, "text"), new Page(10, "text"), new Page(11, "text"), new Page(20, "text"), new Page(30, "image"), new Page(32, "image"), new Page(45, "image")];
+      _ref = this.flatSets;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        page = _ref[_i];
+        _results.push(page.idealArea = page.priority);
+      }
+      return _results;
     });
     it("isGroup", function() {
       var a, d;
@@ -29,7 +37,7 @@
       pageUtils.sort(this.pageSets2);
       return expect(this.pageSets2[2][0].priority).toEqual(3);
     });
-    it("new_sets", function() {
+    it("newSets", function() {
       var target;
       target = pageUtils.new_sets(this.pageSets, this.pageSets[0]);
       return expect(target[0]).toEqual(this.pageSets[1]);
@@ -39,13 +47,14 @@
       target = pageUtils.grouping(this.flatSets);
       return expect(target[4][1].priority).toEqual(11);
     });
+    it("getOptimumSet", function() {
+      var target;
+      target = pageUtils.getOptimumSet(this.flatSets, new Rect(0, 0, 1, 8));
+      expect(target.length).toEqual(3);
+      return expect(target[2].priority).toEqual(5);
+    });
     it("combination", function() {
-      var page, target, _i, _len, _ref;
-      _ref = this.flatSets;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        page = _ref[_i];
-        page.idealArea = page.priority;
-      }
+      var target;
       target = pageUtils.combination(this.flatSets, 2, 25, 100000, []);
       return expect(target.optimumSet[1].priority).toEqual(20);
     });

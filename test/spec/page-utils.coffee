@@ -7,7 +7,8 @@ describe "page-utils", () ->
     @flatSets = [new Page(1, "text"), new Page(2, "text"), new Page(5, "text"),
                   new Page(10, "text"), new Page(11, "text"), new Page(20, "text"),
                   new Page(30, "image"), new Page(32, "image"), new Page(45, "image")]
-
+    for page in @flatSets
+      page.idealArea = page.priority
 
   it "isGroup", () ->
     a = [1, 2, 3]
@@ -29,7 +30,7 @@ describe "page-utils", () ->
     pageUtils.sort(@pageSets2)
     expect(@pageSets2[2][0].priority).toEqual(3)
 
-  it "new_sets", () ->
+  it "newSets", () ->
     target = pageUtils.new_sets(@pageSets, @pageSets[0])
     expect(target[0]).toEqual(@pageSets[1])
 
@@ -37,9 +38,12 @@ describe "page-utils", () ->
     target = pageUtils.grouping(@flatSets)
     expect(target[4][1].priority).toEqual(11)
 
+  it "getOptimumSet", () ->
+    target = pageUtils.getOptimumSet(@flatSets, new Rect(0, 0, 1, 8))
+    expect(target.length).toEqual(3)
+    expect(target[2].priority).toEqual(5)
+
   it "combination", () ->
-    for page in @flatSets
-      page.idealArea = page.priority
     target = pageUtils.combination(@flatSets, 2, 25, 100000, [])
     expect(target.optimumSet[1].priority).toEqual(20)
 
