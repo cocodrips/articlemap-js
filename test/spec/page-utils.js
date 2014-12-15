@@ -64,7 +64,7 @@
       expect(target.length).toEqual(6);
       return expect(target[5][1]).toEqual(4);
     });
-    return it("prioritySum", function() {
+    it("prioritySum", function() {
       var target;
       target = pageUtils.sum([1, 2, 3]);
       expect(target).toEqual(6);
@@ -72,6 +72,10 @@
         return x.priority;
       });
       return expect(target).toEqual(156);
+    });
+    return it("deformPriorities", function() {
+      pageUtils.deformPriorities(this.flatSets, 100, 2, 2);
+      return expect(this.flatSets[8].priority).toEqual(8);
     });
   });
 

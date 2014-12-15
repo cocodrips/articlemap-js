@@ -191,6 +191,30 @@
       }
       return combs;
     },
+    deformPriorities: function(pageSets, area, min_width, min_height) {
+      var areaMin, page, pageSet, prioritySum, x, _i, _len, _results;
+      prioritySum = pageUtils.prioritySum(pageSets);
+      areaMin = min_height * min_height;
+      x = (area / areaMin) / prioritySum;
+      _results = [];
+      for (_i = 0, _len = pageSets.length; _i < _len; _i++) {
+        pageSet = pageSets[_i];
+        if (pageUtils.isGroup(pageSet)) {
+          _results.push((function() {
+            var _j, _len1, _results1;
+            _results1 = [];
+            for (_j = 0, _len1 = pageSet.length; _j < _len1; _j++) {
+              page = pageSet[_j];
+              _results1.push(page.priority = Math.ceil(x * page.priority));
+            }
+            return _results1;
+          })());
+        } else {
+          _results.push(pageSet.priority = Math.ceil(x * pageSet.priority));
+        }
+      }
+      return _results;
+    },
     debug: function(pageSets) {
       var pageSet;
       if (!pageUtils.isGroup(pageSets)) {

@@ -117,6 +117,19 @@
         combs.push(head.concat(tailcombs[j]))
     return combs
 
+  deformPriorities: (pageSets, area, min_width, min_height) ->
+    prioritySum = pageUtils.prioritySum(pageSets)
+    areaMin = min_height * min_height
+    x = (area / areaMin) / prioritySum
+
+    for pageSet in pageSets
+      if pageUtils.isGroup(pageSet)
+        for page in pageSet
+          page.priority = Math.ceil(x * page.priority)
+      else
+        pageSet.priority = Math.ceil(x * pageSet.priority)
+
+
   debug: (pageSets) ->
     if !pageUtils.isGroup(pageSets)
       return pageSets.priority

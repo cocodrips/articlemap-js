@@ -59,3 +59,8 @@ describe "page-utils", () ->
       return x.priority
     )
     expect(target).toEqual(156)
+
+  it "deformPriorities", () ->
+    pageUtils.deformPriorities(@flatSets, 100, 2, 2)
+    expect(@flatSets[8].priority).toEqual(8)
+
