@@ -246,6 +246,18 @@
         s += f(a);
       }
       return s;
+    },
+    diffRatio: function(rect, rectType) {
+      var minRatio, ratio, t, _i, _len, _ref;
+      minRatio = 10000;
+      _ref = rectTypes[rectType];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        t = _ref[_i];
+        ratio = rect.width / rect.height;
+        console.log(t.ratio < ratio ? ratio / t.ratio : t.ratio / ratio);
+        minRatio = Math.min(minRatio, t.ratio < ratio ? ratio / t.ratio : t.ratio / ratio);
+      }
+      return minRatio;
     }
   };
 

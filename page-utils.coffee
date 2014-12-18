@@ -3,7 +3,7 @@
     return pageSet instanceof Array
 
   prioritySum: (pageSets) ->
-    if not pageUtils.isGroup(pageSets)
+    if !pageUtils.isGroup(pageSets)
       return pageSets.priority
 
     s = 0
@@ -142,6 +142,14 @@
     for a in array
       s += f(a)
     return s
+
+  diffRatio: (rect, rectType) ->
+    minRatio = 10000
+    for t in rectTypes[rectType]
+      ratio = rect.width / rect.height
+      console.log if t.ratio < ratio then ratio / t.ratio else t.ratio / ratio
+      minRatio = Math.min(minRatio, if t.ratio < ratio then ratio / t.ratio else t.ratio / ratio)
+    return minRatio
 
 
 

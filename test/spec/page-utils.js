@@ -24,7 +24,8 @@
       return expect(pageUtils.isGroup(d)).toBe(false);
     });
     it("prioritySum", function() {
-      return expect(pageUtils.prioritySum(this.pageSets)).toEqual(6);
+      expect(pageUtils.prioritySum(this.pageSets)).toEqual(6);
+      return expect(pageUtils.prioritySum(this.flatSets)).toEqual(156);
     });
     it("length", function() {
       expect(pageUtils.length(this.pageSets)).toEqual(3);
@@ -73,9 +74,12 @@
       });
       return expect(target).toEqual(156);
     });
-    return it("deformPriorities", function() {
+    it("deformPriorities", function() {
       pageUtils.deformPriorities(this.flatSets, 100, 2, 2);
       return expect(this.flatSets[8].priority).toEqual(8);
+    });
+    return it("diffRatio", function() {
+      return expect(pageUtils.diffRatio(new Rect(0, 0, 100, 120), "text")).toEqual(1.2);
     });
   });
 

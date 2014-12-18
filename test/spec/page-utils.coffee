@@ -2,11 +2,11 @@ describe "page-utils", () ->
   beforeEach () ->
     @pageSets = [new Page(1, "text"), new Page(2, "text"), [new Page(3, "image")]]
     @pageSets2 = [new Page(10, "text"), new Page(2, "text"),
-                    [new Page(3, "image")],
-                    [new Page(2, "text"), new Page(2, "text")]]
+                  [new Page(3, "image")],
+                  [new Page(2, "text"), new Page(2, "text")]]
     @flatSets = [new Page(1, "text"), new Page(2, "text"), new Page(5, "text"),
-                  new Page(10, "text"), new Page(11, "text"), new Page(20, "text"),
-                  new Page(30, "image"), new Page(32, "image"), new Page(45, "image")]
+                 new Page(10, "text"), new Page(11, "text"), new Page(20, "text"),
+                 new Page(30, "image"), new Page(32, "image"), new Page(45, "image")]
     for page in @flatSets
       page.idealArea = page.priority
 
@@ -18,6 +18,7 @@ describe "page-utils", () ->
 
   it "prioritySum", () ->
     expect(pageUtils.prioritySum(@pageSets)).toEqual(6)
+    expect(pageUtils.prioritySum(@flatSets)).toEqual(156)
 
   it "length", () ->
     expect(pageUtils.length(@pageSets)).toEqual(3)
@@ -53,7 +54,7 @@ describe "page-utils", () ->
     expect(target[5][1]).toEqual(4)
 
   it "prioritySum", () ->
-    target = pageUtils.sum([1,2,3])
+    target = pageUtils.sum([1, 2, 3])
     expect(target).toEqual(6)
     target = pageUtils.sum(@flatSets, (x) ->
       return x.priority
@@ -64,3 +65,5 @@ describe "page-utils", () ->
     pageUtils.deformPriorities(@flatSets, 100, 2, 2)
     expect(@flatSets[8].priority).toEqual(8)
 
+  it "diffRatio", () ->
+    expect(pageUtils.diffRatio(new Rect(0, 0, 100, 120), "text")).toEqual(1.2)
