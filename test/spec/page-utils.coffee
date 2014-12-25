@@ -7,8 +7,17 @@ describe "page-utils", () ->
     @flatSets = [new Page(1, "text"), new Page(2, "text"), new Page(5, "text"),
                  new Page(10, "text"), new Page(11, "text"), new Page(20, "text"),
                  new Page(30, "image"), new Page(32, "image"), new Page(45, "image")]
+
+    @hierarchicalSets = [[new Page(1, "text"), new Page(2, "text")], [new Page(5, "text")],
+                         [new Page(10, "text"), new Page(11, "text")], [new Page(20, "text")],
+                         [new Page(30, "image"), new Page(32, "image")], [new Page(45, "image")]]
+
     for page in @flatSets
       page.idealArea = page.priority
+
+    for pageSets in @hierarchicalSets
+      for page in pageSets
+        page.idealArea = page.priority
 
   it "isGroup", () ->
     a = [1, 2, 3]
@@ -24,25 +33,44 @@ describe "page-utils", () ->
     expect(pageUtils.length(@pageSets)).toEqual(3)
     expect(pageUtils.length(@pageSets2)).toEqual(5)
 
-  it "maxi", () ->
+  it "max", () ->
     expect(pageUtils.max(@pageSets2)).toEqual(@pageSets2[0])
+    target = new Page(10, "text")
+    expect(pageUtils.max(target)).toEqual(target)
 
   it "sort", () ->
     pageUtils.sort(@pageSets2)
-    expect(@pageSets2[2][0].priority).toEqual(3)
+    expect(@pageSets2[2][0].priority).toEqual(2)
+
+    sortset = [new Page(10, "text"), new Page(4, "text"), new Page(9, "text")]
+
+    pageUtils.sort(sortset, reverse = false)
+    expect(sortset[0].originalPriority).toEqual(4)
+
+    pageUtils.sort(sortset, reverse = true)
+    expect(sortset[0].originalPriority).toEqual(10)
+
 
   it "newSets", () ->
-    target = pageUtils.new_sets(@pageSets, @pageSets[0])
+    console.log @pageSets
+    target = pageUtils.newSets(@pageSets, @pageSets[0])
+    console.log target
     expect(target[0]).toEqual(@pageSets[1])
 
   it "grouping", () ->
     target = pageUtils.grouping(@flatSets)
-    expect(target[4][1].priority).toEqual(11)
+    expect(target[4][0].priority).toEqual(5)
+
+    console.log target
+    console.log "grouping"
+    for t in target
+      console.log (tt.priority for tt in t)
 
   it "getOptimumSet", () ->
-    target = pageUtils.getOptimumSet(@flatSets, new Rect(0, 0, 1, 8))
-    expect(target.length).toEqual(3)
-    expect(target[2].priority).toEqual(5)
+    target = pageUtils.getOptimumSet(@hierarchicalSets, new Rect(0, 0, 1, 8))
+    expect(target.length).toEqual(2)
+    expect(target[1][0].priority).toEqual(5)
+
 
   it "combination", () ->
     target = pageUtils.combination(@flatSets, 2, 25, 100000, [])
@@ -52,6 +80,9 @@ describe "page-utils", () ->
     target = pageUtils.nCombination([1, 2, 3, 4], 2)
     expect(target.length).toEqual(6)
     expect(target[5][1]).toEqual(4)
+
+    target = pageUtils.nCombination(@hierarchicalSets, 2)
+
 
   it "prioritySum", () ->
     target = pageUtils.sum([1, 2, 3])
@@ -67,3 +98,7 @@ describe "page-utils", () ->
 
   it "diffRatio", () ->
     expect(pageUtils.diffRatio(new Rect(0, 0, 100, 120), "text")).toEqual(1.2)
+
+  it "isFlat", () ->
+    expect(pageUtils.isFlat(@pageSets)).toBeFalsy()
+    expect(pageUtils.isFlat(@flatSets)).toBeTruthy()

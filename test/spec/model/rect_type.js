@@ -3,7 +3,7 @@
   describe("model/rect_type", function() {
     return it("rectTypes", function() {
       expect(rectTypes["image"].length).toEqual(4);
-      return expect(rectTypes["image"][0].min_align).toEqual(1);
+      return expect(rectTypes["image"][0].minAlign).toEqual(1);
     });
   });
 
