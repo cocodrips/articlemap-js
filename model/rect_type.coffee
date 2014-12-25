@@ -1,5 +1,5 @@
 class RectType
-  constructor: (@ratio, @min_align=1) ->
+  constructor: (@ratio, @minAlign=1) ->
 
 @rectTypes =
   'image': [

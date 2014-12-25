@@ -8,7 +8,7 @@ describe "model/rect", ()->
     expect(rect.x).toEqual(0)
 
   it "area", () ->
-    expect(@rect.area).toEqual(120000)
+    expect(@rect.area()).toEqual(120000)
 
   describe "isEqual function", () ->
     it "equal", () ->
@@ -20,3 +20,8 @@ describe "model/rect", ()->
       rect_1 = new Rect(100, 100)
       rect_2 = new Rect(200, 100)
       expect(rect_1.isEqual(rect_2)).toBe(false)
+
+  it "copy", () ->
+    copy = @rect.copy()
+    expect(copy == @rect).toBeFalsy()
+    expect(copy.isEqual(@rect)).toBeTruthy()

@@ -2,6 +2,7 @@
 (function() {
   describe("page-utils", function() {
     beforeEach(function() {
+      var pageSets;
       this.d = [
         {
           priority: 10,
@@ -14,10 +15,63 @@
           type: "text"
         }
       ];
-      return this.layout = new GreedyLayout(this.d, 500, 600);
+      this.flatSets = [new Page(1, "text"), new Page(2, "text"), new Page(5, "text"), new Page(10, "text"), new Page(11, "text"), new Page(20, "text"), new Page(30, "image"), new Page(32, "image"), new Page(45, "image")];
+      this.hierarchicalSets = [[new Page(1, "text"), new Page(2, "text")], [new Page(5, "text")], [new Page(10, "text"), new Page(11, "text")], [new Page(20, "text")], [new Page(30, "image"), new Page(32, "image")], [new Page(45, "image")]];
+      return this.layout = new GreedyLayout(pageSets = this.flatSets);
     });
-    return it("layout", function() {
-      return this.layout.layout();
+    it("layout", function() {
+      var layout, pageSets;
+      layout = new GreedyLayout(pageSets = this.flatSets);
+      return layout.layout();
+    });
+    it("arrange", function() {
+      var pageSets, target;
+      this.layout.split = function() {
+        return 1;
+      };
+      this.layout.arrangeTopLeft = function() {
+        return 2;
+      };
+      target = this.layout.arrange([], new Rect(0, 0, 100, 100));
+      expect(target).toBeUndefined();
+      pageSets = [new Page(5, "text"), new Page(10, "text")];
+      target = this.layout.arrange(pageSets, new Rect(0, 0, 100, 100));
+      expect(target).toEqual(1);
+      pageSets.push(new Page(20, "image"));
+      target = this.layout.arrange(pageSets, new Rect(0, 0, 100, 100));
+      return expect(target).toEqual(2);
+    });
+    it("diffFromIdealArea", function() {
+      var bottom, d, pageSets;
+      pageSets = [new Page(1, "text"), new Page(5, "text"), new Page(10, "text")];
+      pageSets[0].idealArea = 10000;
+      pageSets[1].idealArea = 50000;
+      pageSets[2].idealArea = 100000;
+      bottom = new Rect(0, 0, 230, 300);
+      d = this.layout.diffFromIdealArea(pageSets, bottom);
+      expect(d.diff).toEqual(9000);
+      expect(d.pageSets[1].priority).toEqual(5);
+      pageSets.pop();
+      pageSets.pop();
+      d = this.layout.diffFromIdealArea(pageSets, bottom);
+      expect(d.diff).toEqual(59000);
+      return expect(d.pageSets[0].priority).toEqual(1);
+    });
+    it("bottomRect", function() {
+      var bottom, parent, target, top;
+      parent = new Rect(10, 20, 30, 40);
+      top = new Rect(10, 20, 10, 20);
+      bottom = new Rect(10, 40, 10, 20);
+      target = this.layout.bottomRect(parent, top);
+      return expect(target.isEqual(bottom)).toBeTruthy();
+    });
+    return it("splitPageSetsArea", function() {
+      var pages;
+      pages = [new Page(10, "text"), new Page(15, "text")];
+      pages[0].idealArea = 10000;
+      pages[1].idealArea = 15000;
+      this.layout.splitPageSetsArea(pages, new Rect(0, 0, 200, 200), true, true);
+      return expect(pages[1].rect.y).toEqual(100);
     });
   });
 

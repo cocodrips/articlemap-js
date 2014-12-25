@@ -3,9 +3,9 @@
   var RectType;
 
   RectType = (function() {
-    function RectType(ratio, min_align) {
+    function RectType(ratio, minAlign) {
       this.ratio = ratio;
-      this.min_align = min_align != null ? min_align : 1;
+      this.minAlign = minAlign != null ? minAlign : 1;
     }
 
     return RectType;

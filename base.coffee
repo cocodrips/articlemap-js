@@ -1,8 +1,9 @@
 DEFAULT_WIDTH = 500
 DEFAULT_HEIGHT = 500
 class @Base
-  constructor: (data, @width = DEFAULT_WIDTH, @height = DEFAULT_HEIGHT, @min_width = 200, @min_height = 100) ->
-    @pageSets = @createPageSets(data)
+  constructor: (data = null, @width = DEFAULT_WIDTH, @height = DEFAULT_HEIGHT, @min_width = 100, @min_height = 60, @pageSets = null) ->
+    if !pageSets
+      @pageSets = @createPageSets(data)
 
   createPageSets: (data) ->
     return (new Page(d.priority, d.type, d.name) for d in data)

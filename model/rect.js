@@ -6,13 +6,26 @@
       this.y = y != null ? y : 0;
       this.width = width != null ? width : 0;
       this.height = height != null ? height : 0;
-      this.ratio = this.width / this.height;
-      this.area = this.width * this.height;
-      this.vec4 = [this.x, this.y, this.width, this.height];
     }
 
     Rect.prototype.isEqual = function(other) {
       return this.x === other.x && this.y === other.y && this.width === other.width && this.height === other.height;
+    };
+
+    Rect.prototype.copy = function() {
+      return new Rect(this.x, this.y, this.width, this.height);
+    };
+
+    Rect.prototype.area = function() {
+      return this.width * this.height;
+    };
+
+    Rect.prototype.ratio = function() {
+      return this.width / this.height;
+    };
+
+    Rect.prototype.vec4 = function() {
+      return [this.x, this.y, this.width, this.height];
     };
 
     return Rect;

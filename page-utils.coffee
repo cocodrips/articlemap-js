@@ -1,3 +1,4 @@
+'use strict'
 @pageUtils =
   isGroup: (pageSet) ->
     return pageSet instanceof Array
@@ -24,6 +25,8 @@
     return pageUtils.prioritySum(pageSets) / pageUtils.length(pageSets)
 
   max: (pageSets) ->
+    if !pageUtils.isGroup(pageSets)
+      return pageSets
     maxi = 0
     maxIndex = 0
     for i in [0...pageSets.length]
@@ -34,21 +37,30 @@
     return pageSets[maxIndex]
 
   sort: (pageSets, reverse = false, key = null) ->
-    if not key
-      key = (a, b) -> pageUtils.prioritySum(a) < pageUtils.prioritySum(b)
-
+    if !key
+      key = (a, b) -> pageUtils.prioritySum(a) - pageUtils.prioritySum(b)
     pageSets.sort(key)
-    for i in [0...pageSets.length]
-      if pageUtils.isGroup(pageSets[i])
-        pageUtils.sort(pageSets[i], reverse, key)
+    if reverse
+      pageSets.reverse()
 
-  new_sets: (pageSets, target) ->
-    if !pageUtils.isGroup(pageSets)
-      return pageSets
-    return (pageUtils.new_sets(pageSet) for pageSet in pageSets when target != pageSet)
+
+  newSets: (pageSets, targets) ->
+    if !pageUtils.isGroup(target)
+      targets = [targets]
+
+    sets = []
+    for pageSet in pageSets
+      isSame = false
+      for target in targets
+        if target == pageSet
+          isSame = true
+          break
+      if !isSame
+        sets.push(pageSet)
+    return sets
 
   idealSum: (pageSets) ->
-    if not pageUtils.isGroup(pageSets)
+    if !pageUtils.isGroup(pageSets)
       return pageSets.idealArea
 
     s = 0
@@ -62,30 +74,51 @@
     #   pageSets: Flat array. ( ex. [new Page(1, "text"), new Page(2, "text")] )
     pageSets = [].concat(pageSets)
 
+    pageUtils.sort(pageSets)
+
     top = pageSets.pop()
     groups = [[top]]
 
     for rectType of rectTypes
       # Get pageSets whose type is same.
       pages = (pageSet for pageSet in pageSets when pageSet.type == rectType)
-      pageUtils.sort(pages)
+      pageUtils.sort(pages, reverse = true)
+
 
       while pages.length > 0
         base = pages.pop()
         group = [base]
-        if pages.length > 0 and pages[pages.length - 1].priority <= Math.ceil(base.priority * range)
+
+        if pages.length > 0 and pages[pages.length - 1].originalPriority <= Math.ceil(base.originalPriority * range)
           group.push(pages.pop())
         groups.push(group)
+
+    pageUtils.sort(groups, reverse = true, key = (a, b)-> pageUtils.avg(a) - pageUtils.avg(b))
     return groups
 
   getOptimumSet: (pageSets, rect) ->
-    s = rect.area
+    s = Infinity
     match = Infinity | 1000000000000
     optimumSet = null
-    for i in [1..4] # Change value depends on pageSet length.
-      dict = pageUtils.combination(pageSets, i, s, match, optimumSet)
-      match = dict.match
-      optimumSet = dict.optimumSet
+    #    for i in [1..4] # Change value depends on pageSet length.
+    #      dict = pageUtils.combination(pageSets, i, s, match, optimumSet)
+    #      match = dict.match
+    #      optimumSet = dict.optimumSet
+
+    # TODO:// Implement combination function!
+    for i in [1...1 << pageSets.length]
+      j = i
+      set = []
+      idealSum = 0
+      for k in [0...pageSets.length]
+        if j % 2 == 1
+          idealSum += pageUtils.idealSum(pageSets[k])
+          set.push(pageSets[k])
+        j = j >> 1
+
+      if Math.abs(rect.area() - idealSum) < s
+        s = idealSum
+        optimumSet = set
     return optimumSet
 
   combination: (pageSets, n, s, match, optimumSet) ->
@@ -135,6 +168,19 @@
       return pageSets.priority
     return (pageUtils.debug(pageSet) for pageSet in pageSets)
 
+  diffRatio: (rect, rectType) ->
+    minRatio = 10000
+    for t in rectTypes[rectType]
+      ratio = rect.width / rect.height
+      minRatio = Math.min(minRatio, if t.ratio < ratio then ratio / t.ratio else t.ratio / ratio)
+    return minRatio
+
+  isFlat: (pageSets) ->
+    for page in pageSets
+      if pageUtils.isGroup(page)
+        return false
+    return true
+
   sum: (array, f = null) ->
     if !f
       f = (x) -> return x
@@ -142,14 +188,5 @@
     for a in array
       s += f(a)
     return s
-
-  diffRatio: (rect, rectType) ->
-    minRatio = 10000
-    for t in rectTypes[rectType]
-      ratio = rect.width / rect.height
-      console.log if t.ratio < ratio then ratio / t.ratio else t.ratio / ratio
-      minRatio = Math.min(minRatio, if t.ratio < ratio then ratio / t.ratio else t.ratio / ratio)
-    return minRatio
-
 
 
