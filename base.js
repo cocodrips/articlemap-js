@@ -19,6 +19,7 @@
       if (!pageSets) {
         this.pageSets = this.createPageSets(data);
       }
+      this.layoutOrder = [];
     }
 
     Base.prototype.createPageSets = function(data) {
@@ -53,6 +54,33 @@
         }
         return _results;
       }
+    };
+
+    Base.prototype.newSets = function(pageSets, targets) {
+      var isSame, pageSet, sets, target, _i, _j, _k, _len, _len1, _len2;
+      if (!pageUtils.isGroup(target)) {
+        targets = [targets];
+      }
+      for (_i = 0, _len = targets.length; _i < _len; _i++) {
+        target = targets[_i];
+        this.layoutOrder.push(target);
+      }
+      sets = [];
+      for (_j = 0, _len1 = pageSets.length; _j < _len1; _j++) {
+        pageSet = pageSets[_j];
+        isSame = false;
+        for (_k = 0, _len2 = targets.length; _k < _len2; _k++) {
+          target = targets[_k];
+          if (target === pageSet) {
+            isSame = true;
+            break;
+          }
+        }
+        if (!isSame) {
+          sets.push(pageSet);
+        }
+      }
+      return sets;
     };
 
     return Base;

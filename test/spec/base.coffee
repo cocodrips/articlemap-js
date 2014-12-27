@@ -20,3 +20,7 @@ describe "base", () ->
   it "setIdealArea", () ->
     @base.setIdealArea(@base.pageSets)
     expect(@base.pageSets[0].idealArea > (500 * 500 - 1) / 3).toBeTruthy()
+
+  it "newSets", () ->
+    target = @base.newSets(@base.pageSets, @base.pageSets[0])
+    expect(target[0]).toEqual(@base.pageSets[1])

@@ -50,21 +50,14 @@ describe "page-utils", () ->
     pageUtils.sort(sortset, reverse = true)
     expect(sortset[0].originalPriority).toEqual(10)
 
-
-  it "newSets", () ->
-    console.log @pageSets
-    target = pageUtils.newSets(@pageSets, @pageSets[0])
-    console.log target
-    expect(target[0]).toEqual(@pageSets[1])
-
   it "grouping", () ->
     target = pageUtils.grouping(@flatSets)
     expect(target[4][0].priority).toEqual(5)
-
-    console.log target
-    console.log "grouping"
-    for t in target
-      console.log (tt.priority for tt in t)
+#
+#    console.log target
+#    console.log "grouping"
+#    for t in target
+#      console.log (tt.priority for tt in t)
 
   it "getOptimumSet", () ->
     target = pageUtils.getOptimumSet(@hierarchicalSets, new Rect(0, 0, 1, 8))

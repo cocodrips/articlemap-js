@@ -61,33 +61,10 @@
       pageUtils.sort(sortset, reverse = true);
       return expect(sortset[0].originalPriority).toEqual(10);
     });
-    it("newSets", function() {
-      var target;
-      console.log(this.pageSets);
-      target = pageUtils.newSets(this.pageSets, this.pageSets[0]);
-      console.log(target);
-      return expect(target[0]).toEqual(this.pageSets[1]);
-    });
     it("grouping", function() {
-      var t, target, tt, _i, _len, _results;
+      var target;
       target = pageUtils.grouping(this.flatSets);
-      expect(target[4][0].priority).toEqual(5);
-      console.log(target);
-      console.log("grouping");
-      _results = [];
-      for (_i = 0, _len = target.length; _i < _len; _i++) {
-        t = target[_i];
-        _results.push(console.log((function() {
-          var _j, _len1, _results1;
-          _results1 = [];
-          for (_j = 0, _len1 = t.length; _j < _len1; _j++) {
-            tt = t[_j];
-            _results1.push(tt.priority);
-          }
-          return _results1;
-        })()));
-      }
-      return _results;
+      return expect(target[4][0].priority).toEqual(5);
     });
     it("getOptimumSet", function() {
       var target;

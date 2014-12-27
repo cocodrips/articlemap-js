@@ -1,12 +1,10 @@
 class @GreedyLayout extends Base
   layout: () ->
     pageUtils.sort(@pageSets)
-    console.log @pageSets
     groupSets = pageUtils.grouping(@pageSets)
-    console.log "groupSet", groupSets
     pageUtils.deformPriorities(groupSets, @width * @height, @min_width, @min_height)
     @setIdealArea(groupSets)
-    pageUtils.sort(groupSets, reverse = true, key = pageUtils.avg)
+    pageUtils.sort(groupSets, true, pageUtils.avg)
     @arrange(groupSets, new Rect(0, 0, @width, @height))
 
   arrange: (pageSets, rect) ->
@@ -18,35 +16,33 @@ class @GreedyLayout extends Base
       @arrangeTopLeft(pageSets, rect)
 
   split: (pageSets, rect) ->
-    verticalRects = @splitPageSetsArea(pageSets, rect, isVertical = true, fix = false)
+    verticalRects = @splitPageSetsArea(pageSets, rect, true, false)
     diff = 0
     for verticalRect, i in verticalRects
-      ratioType = null
-      if pageUtils.isGroup(pageSets[i])
-        ratioType = pageSets[i][0].type
-      else
-        ratioType = pageSets[i].type
-
+      ratioType = if pageUtils.isGroup(pageSets[i]) then pageSets[i][0].type else pageSets[i].type
       diff += pageUtils.diffRatio(verticalRect, ratioType)
+    console.log "横", verticalRects, diff
 
     minDiff = diff
     isVertical = true
 
-    horizontalRects = @splitPageSetsArea(pageSets, rect, isVertical = true, fix = false)
+    horizontalRects = @splitPageSetsArea(pageSets, rect, false, false)
+
     diff = 0
     for horizontalRect, i in horizontalRects
-      rectType = if pageUtils.isGroup(pageSets[i]) then pageSets[i][0].type else pageSets[i].type
+      ratioType = if pageUtils.isGroup(pageSets[i]) then pageSets[i][0].type else pageSets[i].type
       diff += pageUtils.diffRatio(horizontalRect, ratioType)
+
+    console.log "縦", horizontalRects, diff
 
     if diff < minDiff
       isVertical = false
 
-    @splitPageSetsArea(pageSets, rect, isVertical = isVertical)
-
+    @splitPageSetsArea(pageSets, rect, isVertical, true)
 
   arrangeTopLeft: (pageSets, rect) ->
     tops = pageUtils.max(pageSets)
-    remainingSets = pageUtils.newSets(pageSets, tops)
+    remainingSets = @newSets(pageSets, tops)
 
     optimalTopRect = null
     optimalSets = []
@@ -82,8 +78,7 @@ class @GreedyLayout extends Base
     remainingRect.width -= width
 
     for target in optimalSets
-      remainingSets = pageUtils.newSets(remainingSets, target)
-    console.log "2", remainingSets, optimalSets
+      remainingSets = @newSets(remainingSets, target)
 
     @split(tops, optimalTopRect)
     @arrange(optimalSets, bottomSetsRect)

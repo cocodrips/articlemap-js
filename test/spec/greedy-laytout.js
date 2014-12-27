@@ -42,20 +42,22 @@
       return expect(target).toEqual(2);
     });
     it("diffFromIdealArea", function() {
-      var bottom, d, pageSets;
-      pageSets = [new Page(1, "text"), new Page(5, "text"), new Page(10, "text")];
-      pageSets[0].idealArea = 10000;
-      pageSets[1].idealArea = 50000;
-      pageSets[2].idealArea = 100000;
-      bottom = new Rect(0, 0, 230, 300);
+      var bottom, d, pageSets, target;
+      pageSets = [[new Page(1, "text")], [new Page(5, "text")], [new Page(10, "text")]];
+      pageSets[0][0].idealArea = 1;
+      pageSets[1][0].idealArea = 5;
+      pageSets[2][0].idealArea = 10;
+      bottom = new Rect(0, 0, 1, 7);
+      target = pageUtils.getOptimumSet(pageSets, bottom);
       d = this.layout.diffFromIdealArea(pageSets, bottom);
-      expect(d.diff).toEqual(9000);
-      expect(d.pageSets[1].priority).toEqual(5);
+      console.log(d);
+      expect(d.diff).toEqual(1);
+      expect(d.pageSets[1][0].priority).toEqual(5);
       pageSets.pop();
       pageSets.pop();
       d = this.layout.diffFromIdealArea(pageSets, bottom);
-      expect(d.diff).toEqual(59000);
-      return expect(d.pageSets[0].priority).toEqual(1);
+      expect(d.diff).toEqual(6);
+      return expect(d.pageSets[0][0].priority).toEqual(1);
     });
     it("bottomRect", function() {
       var bottom, parent, target, top;
