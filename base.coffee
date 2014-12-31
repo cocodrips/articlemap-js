@@ -1,7 +1,7 @@
 DEFAULT_WIDTH = 500
 DEFAULT_HEIGHT = 500
 class @Base
-  constructor: (data = null, @width = DEFAULT_WIDTH, @height = DEFAULT_HEIGHT, @min_width = 100, @min_height = 60, @pageSets = null) ->
+  constructor: (data = null, @pageSets = null, @width = DEFAULT_WIDTH, @height = DEFAULT_HEIGHT, @minWidth = 100, @minHeight = 60) ->
     if !pageSets
       @pageSets = @createPageSets(data)
     @layoutOrder = []

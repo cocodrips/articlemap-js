@@ -11,7 +11,7 @@ describe "base", () ->
           type: "text"
         }
       ]
-    @base = new Base(@d, 500, 500)
+    @base = new Base(@d, null, 500, 500)
 
   it "initialize", () ->
     expect(@base.pageSets[1].originalPriority).toEqual(20)

@@ -16,7 +16,7 @@
       var groupSets;
       pageUtils.sort(this.pageSets);
       groupSets = pageUtils.grouping(this.pageSets);
-      pageUtils.deformPriorities(groupSets, this.width * this.height, this.min_width, this.min_height);
+      pageUtils.deformPriorities(groupSets, this.width * this.height, this.minWidth, this.minHeight);
       this.setIdealArea(groupSets);
       pageUtils.sort(groupSets, true, pageUtils.avg);
       return this.arrange(groupSets, new Rect(0, 0, this.width, this.height));
@@ -41,7 +41,6 @@
         ratioType = pageUtils.isGroup(pageSets[i]) ? pageSets[i][0].type : pageSets[i].type;
         diff += pageUtils.diffRatio(verticalRect, ratioType);
       }
-      console.log("横", verticalRects, diff);
       minDiff = diff;
       isVertical = true;
       horizontalRects = this.splitPageSetsArea(pageSets, rect, false, false);
@@ -51,7 +50,6 @@
         ratioType = pageUtils.isGroup(pageSets[i]) ? pageSets[i][0].type : pageSets[i].type;
         diff += pageUtils.diffRatio(horizontalRect, ratioType);
       }
-      console.log("縦", horizontalRects, diff);
       if (diff < minDiff) {
         isVertical = false;
       }
@@ -85,7 +83,6 @@
           minDiff = d.diff;
           optimalTopRect = d.topRect;
           optimalSets = d.pageSets;
-          isVertical = false;
         }
       }
       width = (pageUtils.idealSum(tops) + pageUtils.idealSum(optimalSets)) / rect.height;
@@ -109,13 +106,23 @@
       topRect = parentRect.copy();
       topRect.height = Math.sqrt(idealArea / ratio);
       topRect.width = ratio * topRect.height;
+      if (parentRect.width - topRect.width < this.minWidth) {
+        topRect.width = parentRect.width;
+        topRect.height = idealArea / topRect.width;
+        return {
+          diff: 0,
+          pageSets: remainingSets,
+          topRect: topRect
+        };
+      }
       if (parentRect.height - topRect.height < this.minHeight) {
         topRect.height = parentRect.height;
         topRect.width = idealArea / topRect.height;
-      }
-      if (parentRect.width - topRect.width < this.minWidth) {
-        topRect.height = idealArea / topRect.width;
-        topRect.width = parentRect.width;
+        return {
+          diff: 0,
+          pageSets: [],
+          topRect: topRect
+        };
       }
       bottomRect = this.bottomRect(parentRect, topRect);
       diff_dict = this.diffFromIdealArea(remainingSets, bottomRect);

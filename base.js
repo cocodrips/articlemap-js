@@ -7,15 +7,15 @@
   DEFAULT_HEIGHT = 500;
 
   this.Base = (function() {
-    function Base(data, width, height, min_width, min_height, pageSets) {
+    function Base(data, pageSets, width, height, minWidth, minHeight) {
       if (data == null) {
         data = null;
       }
+      this.pageSets = pageSets != null ? pageSets : null;
       this.width = width != null ? width : DEFAULT_WIDTH;
       this.height = height != null ? height : DEFAULT_HEIGHT;
-      this.min_width = min_width != null ? min_width : 100;
-      this.min_height = min_height != null ? min_height : 60;
-      this.pageSets = pageSets != null ? pageSets : null;
+      this.minWidth = minWidth != null ? minWidth : 100;
+      this.minHeight = minHeight != null ? minHeight : 60;
       if (!pageSets) {
         this.pageSets = this.createPageSets(data);
       }

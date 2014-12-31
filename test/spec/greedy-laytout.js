@@ -2,7 +2,6 @@
 (function() {
   describe("page-utils", function() {
     beforeEach(function() {
-      var pageSets;
       this.d = [
         {
           priority: 10,
@@ -17,11 +16,11 @@
       ];
       this.flatSets = [new Page(1, "text"), new Page(2, "text"), new Page(5, "text"), new Page(10, "text"), new Page(11, "text"), new Page(20, "text"), new Page(30, "image"), new Page(32, "image"), new Page(45, "image")];
       this.hierarchicalSets = [[new Page(1, "text"), new Page(2, "text")], [new Page(5, "text")], [new Page(10, "text"), new Page(11, "text")], [new Page(20, "text")], [new Page(30, "image"), new Page(32, "image")], [new Page(45, "image")]];
-      return this.layout = new GreedyLayout(pageSets = this.flatSets);
+      return this.layout = new GreedyLayout(null, this.flatSets);
     });
     it("layout", function() {
-      var layout, pageSets;
-      layout = new GreedyLayout(pageSets = this.flatSets);
+      var layout;
+      layout = new GreedyLayout(null, this.flatSets);
       return layout.layout();
     });
     it("arrange", function() {

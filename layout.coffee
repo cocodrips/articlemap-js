@@ -1,8 +1,15 @@
 $ ->
-  greedyLayout = new GreedyLayout(data = @data, width = 500, height = 300)
-  greedyLayout.layout()
+#  greedyLayout = new GreedyLayout(data = @data, width = 500, height = 300)
+#  greedyLayout.layout()
+#  pageSets = greedyLayout.pageSets
 
-  pageSets = greedyLayout.pageSets
+  data = []
+  for i in [0...10]
+    data.push(new Page(Math.ceil(Math.random() * 100), "text"))
+  hillClimbing = new HillClimbing(null, data, 500, 300)
+  hillClimbing.layout()
+  pageSets = hillClimbing.pageSets
+  hillClimbing.climbing()
 
   articles = d3.select("#main-container")
   .selectAll("article")
@@ -17,10 +24,3 @@ $ ->
   .append("div")
   .attr("class", "article-inner")
   .text((d) -> return d.originalPriority)
-
-
-  a = [1,2,3]
-  console.log a
-  a.pop()
-  a.pop()
-  a.pop()

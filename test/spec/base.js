@@ -11,7 +11,7 @@
           type: "text"
         }
       ];
-      return this.base = new Base(this.d, 500, 500);
+      return this.base = new Base(this.d, null, 500, 500);
     });
     it("initialize", function() {
       expect(this.base.pageSets[1].originalPriority).toEqual(20);

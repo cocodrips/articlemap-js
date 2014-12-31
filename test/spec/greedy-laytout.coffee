@@ -22,10 +22,10 @@ describe "page-utils", () ->
     @hierarchicalSets = [[new Page(1, "text"), new Page(2, "text")], [new Page(5, "text")],
                          [new Page(10, "text"), new Page(11, "text")], [new Page(20, "text")],
                          [new Page(30, "image"), new Page(32, "image")], [new Page(45, "image")]]
-    @layout = new GreedyLayout(pageSets = @flatSets)
+    @layout = new GreedyLayout(null, @flatSets)
 
   it "layout", () ->
-    layout = new GreedyLayout(pageSets = @flatSets)
+    layout = new GreedyLayout(null, @flatSets)
     layout.layout()
 
   it "arrange", () ->
