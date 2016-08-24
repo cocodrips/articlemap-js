@@ -8,16 +8,62 @@
   <link href='http://fonts.googleapis.com/css?family=Exo+2:400,700,200' rel='stylesheet' type='text/css'>
   <link rel="stylesheet"
         href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,700italic,300,700">
+  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
   <link rel="stylesheet" href="css/article.css"/>
   <link rel="stylesheet" href="css/all.css"/>
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="css/layouts/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="css/layouts/side-menu.css">
+  <!--<![endif]-->
+
 
 
 </head>
 <body>
-<div class="pure-g" id="container">
-  <div id="main-container">
-  </div>
 
+
+
+<div id="layout">
+  <div id="main">
+    <div class="header">
+      <h1>Random Graph</h1>
+      <h2>Set parameters</h2>
+      <form id="param-form" action="" class="pure-form" method="get">
+        <fieldset>
+          <table class="top-form">
+            <tr>
+              <td>width</td>
+              <td><input id="width" type="text" name="width" placeholder="900"></td>
+            </tr>
+            <tr>
+              <td>high</td>
+              <td><input id="height" type="text" name="height" placeholder="500"></td>
+            </tr>
+            <tr>
+              <td>Data num</td>
+              <td><input id="N" type="text" name="N" placeholder="10"></td>
+            </tr>
+            <tr>
+              <td>Max data size</td>
+              <td><input id="max-size" type="text" name="max-size" placeholder="100"></td>
+            </tr>
+
+          </table>
+          <button type="submit" class="pure-button pure-button-primary">Redraw</button>
+        </fieldset>
+      </form>
+    </div>
+
+    <div class="content">
+      <h2 class="content-subhead">Generate and visualize a random graph with p=k/N</h2>
+      <div id="main-container">
+
+      </div>
+      <h2 class="content-subhead">Link</h2>
+    </div>
+  </div>
 </div>
 
 <footer></footer>

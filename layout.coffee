@@ -2,11 +2,28 @@ $ ->
 #  greedyLayout = new GreedyLayout(data = @data, width = 500, height = 300)
 #  greedyLayout.layout()
 #  pageSets = greedyLayout.pageSets
-
+  
   data = []
-  for i in [0...10]
-    data.push(new Page(Math.ceil(Math.random() * 100), "text"))
-  hillClimbing = new HillClimbing(null, data, 500, 300)
+  url   = location.href
+  params    = url.split("?")
+  spparams   = params[1].split("&")
+  paramArray = [];
+
+  for i in [0...spparams.length]
+    vol = spparams[i].split("=")
+    $('#param-form [name=' + vol[0] + ']').val(vol[1]) 
+
+  _width = $('#param-form [name=width]').val() || 900
+  _height = $('#param-form [name=height]').val() || 500
+  _N = $('#param-form [name=N]').val() || 15
+  _max = $('#param-form [name=max-size]').val() || 100
+  console.log _width 
+  console.log _N
+  
+  
+  for i in [0..._N]
+    data.push(new Page(Math.ceil(Math.random() * _max), "text"))
+  hillClimbing = new HillClimbing(null, data, _width, _height)
   hillClimbing.layout()
   pageSets = hillClimbing.pageSets
   hillClimbing.climbing()

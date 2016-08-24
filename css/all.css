@@ -1,13 +1,14 @@
 #main-container {
   width: 100%;
-  top: 2px; }
+  top: 2px;
+  position: relative; }
 
 a {
   text-decoration: none; }
 
 body {
   font-family: 'Exo 2', sans-serif;
-  background-color: #eeeeee; }
+  background-color: #fff; }
   body .question {
     font-size: 12px;
     font-weight: bold; }
@@ -76,10 +77,8 @@ body {
 @-webkit-keyframes loading-animation {
   0% {
     color: #d2cdc7; }
-
   100% {
     color: #806b59; } }
-
 .ajax-fail {
   display: block;
   display: none; }
@@ -99,3 +98,17 @@ body {
     border: 15px solid transparent;
     min-width: 300px;
     vertical-align: top; }
+
+footer {
+  height: 1000px;
+  margin-bottom: 1000px; }
+
+.top-form {
+  text-align: center;
+  margin: 0 auto; }
+  .top-form td {
+    text-align: left; }
+  .top-form tr {
+    line-height: 2em; }
+
+/*# sourceMappingURL=all.css.map */
