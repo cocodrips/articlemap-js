@@ -11,15 +11,20 @@
           type: "text"
         }
       ];
-      return this.base = new Base(this.d, 500, 500);
+      return this.base = new Base(this.d, null, 500, 500);
     });
     it("initialize", function() {
       expect(this.base.pageSets[1].originalPriority).toEqual(20);
       return expect(this.base.pageSets[0].type).toEqual(this.d[0].type);
     });
-    return it("setIdealArea", function() {
+    it("setIdealArea", function() {
       this.base.setIdealArea(this.base.pageSets);
       return expect(this.base.pageSets[0].idealArea > (500 * 500 - 1) / 3).toBeTruthy();
+    });
+    return it("newSets", function() {
+      var target;
+      target = this.base.newSets(this.base.pageSets, this.base.pageSets[0]);
+      return expect(target[0]).toEqual(this.base.pageSets[1]);
     });
   });
 

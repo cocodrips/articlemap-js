@@ -7,6 +7,7 @@ $text: #222222;
 #main-container {
   width: 100%;
   top: 2px;
+  position: relative;
 }
 
 a {
@@ -16,7 +17,7 @@ a {
 
 body {
   font-family: 'Exo 2', sans-serif;
-  background-color: #eeeeee;
+  background-color: #fff;
 
   .question {
     font-size: 12px;
@@ -149,5 +150,21 @@ body {
     min-width: $sidebar-width;
     vertical-align: top;
 
+  }
+}
+
+footer {
+  height:1000px;
+  margin-bottom: 1000px;
+}
+
+.top-form {
+  text-align: center;
+  margin: 0 auto;
+  td {
+    text-align: left;
+  }
+  tr {
+    line-height: 2em;
   }
 }

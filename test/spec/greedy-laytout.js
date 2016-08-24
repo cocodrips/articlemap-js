@@ -2,7 +2,6 @@
 (function() {
   describe("page-utils", function() {
     beforeEach(function() {
-      var pageSets;
       this.d = [
         {
           priority: 10,
@@ -17,11 +16,11 @@
       ];
       this.flatSets = [new Page(1, "text"), new Page(2, "text"), new Page(5, "text"), new Page(10, "text"), new Page(11, "text"), new Page(20, "text"), new Page(30, "image"), new Page(32, "image"), new Page(45, "image")];
       this.hierarchicalSets = [[new Page(1, "text"), new Page(2, "text")], [new Page(5, "text")], [new Page(10, "text"), new Page(11, "text")], [new Page(20, "text")], [new Page(30, "image"), new Page(32, "image")], [new Page(45, "image")]];
-      return this.layout = new GreedyLayout(pageSets = this.flatSets);
+      return this.layout = new GreedyLayout(null, this.flatSets);
     });
     it("layout", function() {
-      var layout, pageSets;
-      layout = new GreedyLayout(pageSets = this.flatSets);
+      var layout;
+      layout = new GreedyLayout(null, this.flatSets);
       return layout.layout();
     });
     it("arrange", function() {
@@ -42,20 +41,22 @@
       return expect(target).toEqual(2);
     });
     it("diffFromIdealArea", function() {
-      var bottom, d, pageSets;
-      pageSets = [new Page(1, "text"), new Page(5, "text"), new Page(10, "text")];
-      pageSets[0].idealArea = 10000;
-      pageSets[1].idealArea = 50000;
-      pageSets[2].idealArea = 100000;
-      bottom = new Rect(0, 0, 230, 300);
+      var bottom, d, pageSets, target;
+      pageSets = [[new Page(1, "text")], [new Page(5, "text")], [new Page(10, "text")]];
+      pageSets[0][0].idealArea = 1;
+      pageSets[1][0].idealArea = 5;
+      pageSets[2][0].idealArea = 10;
+      bottom = new Rect(0, 0, 1, 7);
+      target = pageUtils.getOptimumSet(pageSets, bottom);
       d = this.layout.diffFromIdealArea(pageSets, bottom);
-      expect(d.diff).toEqual(9000);
-      expect(d.pageSets[1].priority).toEqual(5);
+      console.log(d);
+      expect(d.diff).toEqual(1);
+      expect(d.pageSets[1][0].priority).toEqual(5);
       pageSets.pop();
       pageSets.pop();
       d = this.layout.diffFromIdealArea(pageSets, bottom);
-      expect(d.diff).toEqual(59000);
-      return expect(d.pageSets[0].priority).toEqual(1);
+      expect(d.diff).toEqual(6);
+      return expect(d.pageSets[0][0].priority).toEqual(1);
     });
     it("bottomRect", function() {
       var bottom, parent, target, top;

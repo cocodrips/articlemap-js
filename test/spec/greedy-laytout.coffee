@@ -22,10 +22,10 @@ describe "page-utils", () ->
     @hierarchicalSets = [[new Page(1, "text"), new Page(2, "text")], [new Page(5, "text")],
                          [new Page(10, "text"), new Page(11, "text")], [new Page(20, "text")],
                          [new Page(30, "image"), new Page(32, "image")], [new Page(45, "image")]]
-    @layout = new GreedyLayout(pageSets = @flatSets)
+    @layout = new GreedyLayout(null, @flatSets)
 
   it "layout", () ->
-    layout = new GreedyLayout(pageSets = @flatSets)
+    layout = new GreedyLayout(null, @flatSets)
     layout.layout()
 
   it "arrange", () ->
@@ -43,20 +43,22 @@ describe "page-utils", () ->
     expect(target).toEqual(2)
 
   it "diffFromIdealArea", () ->
-    pageSets = [new Page(1, "text"), new Page(5, "text"), new Page(10, "text")]
-    pageSets[0].idealArea = 10000
-    pageSets[1].idealArea = 50000
-    pageSets[2].idealArea = 100000
-    bottom = new Rect(0, 0, 230, 300)
+    pageSets = [[new Page(1, "text")], [new Page(5, "text")], [new Page(10, "text")]]
+    pageSets[0][0].idealArea = 1
+    pageSets[1][0].idealArea = 5
+    pageSets[2][0].idealArea = 10
+    bottom = new Rect(0, 0, 1, 7)
+    target = pageUtils.getOptimumSet(pageSets, bottom)
     d = @layout.diffFromIdealArea(pageSets, bottom)
-    expect(d.diff).toEqual(9000)
-    expect(d.pageSets[1].priority).toEqual(5)
+    console.log d
+    expect(d.diff).toEqual(1)
+    expect(d.pageSets[1][0].priority).toEqual(5)
 
     pageSets.pop()
     pageSets.pop()
     d = @layout.diffFromIdealArea(pageSets, bottom)
-    expect(d.diff).toEqual(59000)
-    expect(d.pageSets[0].priority).toEqual(1)
+    expect(d.diff).toEqual(6)
+    expect(d.pageSets[0][0].priority).toEqual(1)
 
   it "bottomRect", () ->
     parent = new Rect(10, 20, 30, 40)

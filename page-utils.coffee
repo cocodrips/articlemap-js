@@ -44,21 +44,6 @@
       pageSets.reverse()
 
 
-  newSets: (pageSets, targets) ->
-    if !pageUtils.isGroup(target)
-      targets = [targets]
-
-    sets = []
-    for pageSet in pageSets
-      isSame = false
-      for target in targets
-        if target == pageSet
-          isSame = true
-          break
-      if !isSame
-        sets.push(pageSet)
-    return sets
-
   idealSum: (pageSets) ->
     if !pageUtils.isGroup(pageSets)
       return pageSets.idealArea
@@ -98,7 +83,7 @@
 
   getOptimumSet: (pageSets, rect) ->
     s = Infinity
-    match = Infinity | 1000000000000
+#    match = Infinity | 1000000000000
     optimumSet = null
     #    for i in [1..4] # Change value depends on pageSet length.
     #      dict = pageUtils.combination(pageSets, i, s, match, optimumSet)
@@ -117,7 +102,7 @@
         j = j >> 1
 
       if Math.abs(rect.area() - idealSum) < s
-        s = idealSum
+        s = Math.abs(rect.area() - idealSum)
         optimumSet = set
     return optimumSet
 

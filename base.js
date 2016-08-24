@@ -7,18 +7,19 @@
   DEFAULT_HEIGHT = 500;
 
   this.Base = (function() {
-    function Base(data, width, height, min_width, min_height, pageSets) {
+    function Base(data, pageSets, width, height, minWidth, minHeight) {
       if (data == null) {
         data = null;
       }
+      this.pageSets = pageSets != null ? pageSets : null;
       this.width = width != null ? width : DEFAULT_WIDTH;
       this.height = height != null ? height : DEFAULT_HEIGHT;
-      this.min_width = min_width != null ? min_width : 100;
-      this.min_height = min_height != null ? min_height : 60;
-      this.pageSets = pageSets != null ? pageSets : null;
+      this.minWidth = minWidth != null ? minWidth : 100;
+      this.minHeight = minHeight != null ? minHeight : 60;
       if (!pageSets) {
         this.pageSets = this.createPageSets(data);
       }
+      this.layoutOrder = [];
     }
 
     Base.prototype.createPageSets = function(data) {
@@ -53,6 +54,33 @@
         }
         return _results;
       }
+    };
+
+    Base.prototype.newSets = function(pageSets, targets) {
+      var isSame, pageSet, sets, target, _i, _j, _k, _len, _len1, _len2;
+      if (!pageUtils.isGroup(target)) {
+        targets = [targets];
+      }
+      for (_i = 0, _len = targets.length; _i < _len; _i++) {
+        target = targets[_i];
+        this.layoutOrder.push(target);
+      }
+      sets = [];
+      for (_j = 0, _len1 = pageSets.length; _j < _len1; _j++) {
+        pageSet = pageSets[_j];
+        isSame = false;
+        for (_k = 0, _len2 = targets.length; _k < _len2; _k++) {
+          target = targets[_k];
+          if (target === pageSet) {
+            isSame = true;
+            break;
+          }
+        }
+        if (!isSame) {
+          sets.push(pageSet);
+        }
+      }
+      return sets;
     };
 
     return Base;

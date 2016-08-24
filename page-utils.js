@@ -63,28 +63,6 @@
         return pageSets.reverse();
       }
     },
-    newSets: function(pageSets, targets) {
-      var isSame, pageSet, sets, target, _i, _j, _len, _len1;
-      if (!pageUtils.isGroup(target)) {
-        targets = [targets];
-      }
-      sets = [];
-      for (_i = 0, _len = pageSets.length; _i < _len; _i++) {
-        pageSet = pageSets[_i];
-        isSame = false;
-        for (_j = 0, _len1 = targets.length; _j < _len1; _j++) {
-          target = targets[_j];
-          if (target === pageSet) {
-            isSame = true;
-            break;
-          }
-        }
-        if (!isSame) {
-          sets.push(pageSet);
-        }
-      }
-      return sets;
-    },
     idealSum: function(pageSets) {
       var i, s, _i, _ref;
       if (!pageUtils.isGroup(pageSets)) {
@@ -133,9 +111,8 @@
       return groups;
     },
     getOptimumSet: function(pageSets, rect) {
-      var i, idealSum, j, k, match, optimumSet, s, set, _i, _j, _ref, _ref1;
+      var i, idealSum, j, k, optimumSet, s, set, _i, _j, _ref, _ref1;
       s = Infinity;
-      match = Infinity | 1000000000000;
       optimumSet = null;
       for (i = _i = 1, _ref = 1 << pageSets.length; 1 <= _ref ? _i < _ref : _i > _ref; i = 1 <= _ref ? ++_i : --_i) {
         j = i;
@@ -149,7 +126,7 @@
           j = j >> 1;
         }
         if (Math.abs(rect.area() - idealSum) < s) {
-          s = idealSum;
+          s = Math.abs(rect.area() - idealSum);
           optimumSet = set;
         }
       }

@@ -13,14 +13,12 @@
     }
 
     GreedyLayout.prototype.layout = function() {
-      var groupSets, key, reverse;
+      var groupSets;
       pageUtils.sort(this.pageSets);
-      console.log(this.pageSets);
       groupSets = pageUtils.grouping(this.pageSets);
-      console.log("groupSet", groupSets);
-      pageUtils.deformPriorities(groupSets, this.width * this.height, this.min_width, this.min_height);
+      pageUtils.deformPriorities(groupSets, this.width * this.height, this.minWidth, this.minHeight);
       this.setIdealArea(groupSets);
-      pageUtils.sort(groupSets, reverse = true, key = pageUtils.avg);
+      pageUtils.sort(groupSets, true, pageUtils.avg);
       return this.arrange(groupSets, new Rect(0, 0, this.width, this.height));
     };
 
@@ -35,38 +33,33 @@
     };
 
     GreedyLayout.prototype.split = function(pageSets, rect) {
-      var diff, fix, horizontalRect, horizontalRects, i, isVertical, minDiff, ratioType, rectType, verticalRect, verticalRects, _i, _j, _len, _len1;
-      verticalRects = this.splitPageSetsArea(pageSets, rect, isVertical = true, fix = false);
+      var diff, horizontalRect, horizontalRects, i, isVertical, minDiff, ratioType, verticalRect, verticalRects, _i, _j, _len, _len1;
+      verticalRects = this.splitPageSetsArea(pageSets, rect, true, false);
       diff = 0;
       for (i = _i = 0, _len = verticalRects.length; _i < _len; i = ++_i) {
         verticalRect = verticalRects[i];
-        ratioType = null;
-        if (pageUtils.isGroup(pageSets[i])) {
-          ratioType = pageSets[i][0].type;
-        } else {
-          ratioType = pageSets[i].type;
-        }
+        ratioType = pageUtils.isGroup(pageSets[i]) ? pageSets[i][0].type : pageSets[i].type;
         diff += pageUtils.diffRatio(verticalRect, ratioType);
       }
       minDiff = diff;
       isVertical = true;
-      horizontalRects = this.splitPageSetsArea(pageSets, rect, isVertical = true, fix = false);
+      horizontalRects = this.splitPageSetsArea(pageSets, rect, false, false);
       diff = 0;
       for (i = _j = 0, _len1 = horizontalRects.length; _j < _len1; i = ++_j) {
         horizontalRect = horizontalRects[i];
-        rectType = pageUtils.isGroup(pageSets[i]) ? pageSets[i][0].type : pageSets[i].type;
+        ratioType = pageUtils.isGroup(pageSets[i]) ? pageSets[i][0].type : pageSets[i].type;
         diff += pageUtils.diffRatio(horizontalRect, ratioType);
       }
       if (diff < minDiff) {
         isVertical = false;
       }
-      return this.splitPageSetsArea(pageSets, rect, isVertical = isVertical);
+      return this.splitPageSetsArea(pageSets, rect, isVertical, true);
     };
 
     GreedyLayout.prototype.arrangeTopLeft = function(pageSets, rect) {
       var bottomSetsRect, d, idealArea, isVertical, minDiff, optimalSets, optimalTopRect, rectType, remainingRect, remainingSets, target, tops, width, _i, _j, _len, _len1, _ref1;
       tops = pageUtils.max(pageSets);
-      remainingSets = pageUtils.newSets(pageSets, tops);
+      remainingSets = this.newSets(pageSets, tops);
       optimalTopRect = null;
       optimalSets = [];
       minDiff = 100000000000000;
@@ -90,7 +83,6 @@
           minDiff = d.diff;
           optimalTopRect = d.topRect;
           optimalSets = d.pageSets;
-          isVertical = false;
         }
       }
       width = (pageUtils.idealSum(tops) + pageUtils.idealSum(optimalSets)) / rect.height;
@@ -102,9 +94,8 @@
       remainingRect.width -= width;
       for (_j = 0, _len1 = optimalSets.length; _j < _len1; _j++) {
         target = optimalSets[_j];
-        remainingSets = pageUtils.newSets(remainingSets, target);
+        remainingSets = this.newSets(remainingSets, target);
       }
-      console.log("2", remainingSets, optimalSets);
       this.split(tops, optimalTopRect);
       this.arrange(optimalSets, bottomSetsRect);
       return this.arrange(remainingSets, remainingRect);
@@ -115,13 +106,23 @@
       topRect = parentRect.copy();
       topRect.height = Math.sqrt(idealArea / ratio);
       topRect.width = ratio * topRect.height;
+      if (parentRect.width - topRect.width < this.minWidth) {
+        topRect.width = parentRect.width;
+        topRect.height = idealArea / topRect.width;
+        return {
+          diff: 0,
+          pageSets: remainingSets,
+          topRect: topRect
+        };
+      }
       if (parentRect.height - topRect.height < this.minHeight) {
         topRect.height = parentRect.height;
         topRect.width = idealArea / topRect.height;
-      }
-      if (parentRect.width - topRect.width < this.minWidth) {
-        topRect.height = idealArea / topRect.width;
-        topRect.width = parentRect.width;
+        return {
+          diff: 0,
+          pageSets: [],
+          topRect: topRect
+        };
       }
       bottomRect = this.bottomRect(parentRect, topRect);
       diff_dict = this.diffFromIdealArea(remainingSets, bottomRect);
