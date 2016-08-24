@@ -1,8 +1,5 @@
 $ ->
-#  greedyLayout = new GreedyLayout(data = @data, width = 500, height = 300)
-#  greedyLayout.layout()
-#  pageSets = greedyLayout.pageSets
-  
+
   data = []
   url   = location.href
   params    = url.split("?")
@@ -23,10 +20,14 @@ $ ->
   
   for i in [0..._N]
     data.push(new Page(Math.ceil(Math.random() * _max), "text"))
-  hillClimbing = new HillClimbing(null, data, _width, _height)
-  hillClimbing.layout()
-  pageSets = hillClimbing.pageSets
-  hillClimbing.climbing()
+#  hillClimbing = new HillClimbing(null, data, _width, _height)
+#  hillClimbing.layout()
+#  pageSets = hillClimbing.pageSets
+#  hillClimbing.climbing()
+  greedyLayout = new GreedyLayout(null, data, _width, _height)
+  greedyLayout.layout()
+  pageSets = greedyLayout.pageSets
+
 
   articles = d3.select("#main-container")
   .selectAll("article")

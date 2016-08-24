@@ -85,25 +85,25 @@
     s = Infinity
 #    match = Infinity | 1000000000000
     optimumSet = null
-    #    for i in [1..4] # Change value depends on pageSet length.
-    #      dict = pageUtils.combination(pageSets, i, s, match, optimumSet)
-    #      match = dict.match
-    #      optimumSet = dict.optimumSet
+    for i in [1..3] # Change value depends on pageSet length.
+      dict = pageUtils.combination(pageSets, i, s, match, optimumSet)
+      match = dict.match
+      optimumSet = dict.optimumSet
 
-    # TODO:// Implement combination function!
-    for i in [1...1 << pageSets.length]
-      j = i
-      set = []
-      idealSum = 0
-      for k in [0...pageSets.length]
-        if j % 2 == 1
-          idealSum += pageUtils.idealSum(pageSets[k])
-          set.push(pageSets[k])
-        j = j >> 1
-
-      if Math.abs(rect.area() - idealSum) < s
-        s = Math.abs(rect.area() - idealSum)
-        optimumSet = set
+#    # TODO:// Implement combination function!
+#    for i in [1...1 << pageSets.length]
+#      j = i
+#      set = []
+#      idealSum = 0
+#      for k in [0...pageSets.length]
+#        if j % 2 == 1
+#          idealSum += pageUtils.idealSum(pageSets[k])
+#          set.push(pageSets[k])
+#        j = j >> 1
+#
+#      if Math.abs(rect.area() - idealSum) < s
+#        s = Math.abs(rect.area() - idealSum)
+#        optimumSet = set
     return optimumSet
 
   combination: (pageSets, n, s, match, optimumSet) ->
